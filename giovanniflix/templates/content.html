@@ -1,0 +1,9 @@
+{% extends "index.html" %}
+{% block content%}
+<h1>Content</h1><br/>
+{% for content in content_list %}
+<ol>
+  <li><a href={{ content.link }}>{{ content.title }}</a>({{ content.id }})</li>
+</ol>
+{% endfor %}
+{% endblock %}
