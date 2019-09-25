@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request
 from uuid import uuid4
+from giovanniflix.content.models import ContentEntry
+from giovanniflix import db
 
 bp = Blueprint('content_bp', __name__, template_folder="templates")
 
@@ -7,18 +9,18 @@ content_storage = []
 
 @bp.route("/content", methods=["GET"])
 def get_all_content():
-    return render_template("content.html", content_list=content_storage)
+    content_list = ContentEntry.query.all()
+    return render_template("content.html", content_list=content_list)
 
 @bp.route("/content", methods=["POST"])
 def post_content():
     body = request.json
-    content_id = uuid4()
-    content_title = body['title']
-    content_link = body['link']
-    content = {
-        "id": content_id,
-        "title": content_title,
-        "link": content_link
+    data = {
+        "id": "{}".format(uuid4()),
+        "title": body["title"],
+        "link": body["link"]
     }
-    content_storage.append(content)
-    return "<h1>Result</h1><br/>Content was published. ID is {}".format(content_id)
+    content_entry = ContentEntry(**data)
+    db.session.add(content_entry)
+    db.session.commit()
+    return "<h1>Result</h1><br/>Content was published. ID is {}".format(data['id'])

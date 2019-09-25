@@ -11,6 +11,7 @@ pep8 = "*"
 [packages]
 sphinx = "*"
 flask = "*"
+flask-sqlalchemy = "*"
 
 [requires]
 python_version = "3.6"
